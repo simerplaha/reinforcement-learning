@@ -95,7 +95,7 @@ object Player {
   /**
    * Updates the knowledge based on the formula in the book "Reinforcement learning An Introduction".
    *
-   * TODO - Needs review.
+   * TODO - The Math needs review.
    */
   def updateKnowledge(board: Board.Over, bot: Bot, winOrLossRating: Double) = {
     bot.currentPlay.reverse.foldLeft(winOrLossRating) {
