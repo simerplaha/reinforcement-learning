@@ -4,3 +4,4 @@ Book - [Reinforcement Learning: An Introduction](http://incompleteideas.net/book
 
 - [Tic-Tac-Toe](/src/main/scala/tictactoe/)
 - [Multi Arm Bandit - Incremental Implementation](/src/main/scala/bandit/Bandit.scala)
+- [Grid world](/src/main/scala/grid/GridWorld.scala)

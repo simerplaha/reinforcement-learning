@@ -1,5 +1,7 @@
 package tictactoe
 
+import util.Matrix
+
 import scala.annotation.tailrec
 
 /**
@@ -7,7 +9,7 @@ import scala.annotation.tailrec
  * and manages the state of the board.
  */
 sealed trait Board {
-  def matrix: Matrix[Move]
+  def matrix: Matrix[Option[Move]]
 
   def isOver: Boolean
 
@@ -30,10 +32,10 @@ object Board {
   val MAX_BOARD_INDEX = 2
 
   def create(): Board.Active =
-    Active(Matrix.create(3, 3))
+    Active(Matrix.create(3, 3, None))
 
   def place(row: Int, col: Int, move: Move, board: Board.Active): Board = {
-    val updatedMoves = board.matrix.update(row, col, move)
+    val updatedMoves = board.matrix.updateCopy(row, col, Some(move))
     val newBoard = Board.Active(updatedMoves)
     validateState(newBoard)
   }
@@ -149,7 +151,7 @@ object Board {
   /**
    * Indicates that board is still in play state.
    */
-  case class Active private(matrix: Matrix[Move]) extends Board {
+  case class Active private(matrix: Matrix[Option[Move]]) extends Board {
     def isOver: Boolean = false
   }
 
@@ -160,11 +162,11 @@ object Board {
   /**
    * Game over - There is a winner!
    */
-  case class Won private(matrix: Matrix[Move],
+  case class Won private(matrix: Matrix[Option[Move]],
                          winner: Move) extends Over
 
   /**
    * Game over - It's a draw!
    */
-  case class Draw private(matrix: Matrix[Move]) extends Over
+  case class Draw private(matrix: Matrix[Option[Move]]) extends Over
 }

@@ -1,5 +1,7 @@
 package tictactoe
 
+import util.Matrix
+
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 import scala.util.Random
@@ -63,10 +65,16 @@ object Player {
   def getPossibleMoves(board: Board.Active, move: Move): List[Board] = {
     val possibleMoves = ListBuffer.empty[Board]
 
-    board.matrix.foreachNone {
-      case (row, col) =>
-        possibleMoves += Board.place(row, col, move, board)
+    board.matrix.foreachValue {
+      case (row, col, value) =>
+        if(value.isEmpty)
+          possibleMoves += Board.place(row, col, move, board)
     }
+
+//    board.matrix.foreachNone {
+//      case (row, col) =>
+//        possibleMoves += Board.place(row, col, move, board)
+//    }
 
     possibleMoves.to(List)
   }
@@ -132,5 +140,5 @@ object Player {
 
   case class Bot(move: Move,
                  currentPlay: ListBuffer[CurrentPlay],
-                 knowledge: mutable.Map[Matrix[Move], Double]) extends Player
+                 knowledge: mutable.Map[Matrix[Option[Move]], Double]) extends Player
 }
