@@ -36,9 +36,9 @@ object Game {
 
     println(
       """
-        |************
-        |Game started
-        |************
+        |*********************************************
+        |Game started - TODO - needs better prediction
+        |*********************************************
         |""".stripMargin)
 
     println("You are X and the bot is O")

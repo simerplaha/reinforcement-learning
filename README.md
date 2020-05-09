@@ -1,6 +1,6 @@
 # Reinforcement learning
 
-Material referred
+Referred material
 
 - Book by Sutton & Barto - [Reinforcement Learning: An Introduction](http://incompleteideas.net/book/the-book-2nd.html)
 - Lectures by David Silver - [Introduction to reinforcement learning](https://www.youtube.com/playlist?list=PLqYmG7hTraZDM-OYHWgPebj2MfCFzFObQ) 
@@ -20,7 +20,7 @@ Last lever has the highest probability (`0.90`) therefore has more chance of get
 
 ## Student Markov Chain
 
-Implements the `Student MDP` at David Silver's lecture 2 at [this (24:56)](https://youtu.be/lfHX2hHRMVQ?list=PLqYmG7hTraZDM-OYHWgPebj2MfCFzFObQ&t=1496) timestamp.
+Implements the `Student MDP` from David Silver's lecture 2 at [this (24:56)](https://youtu.be/lfHX2hHRMVQ?list=PLqYmG7hTraZDM-OYHWgPebj2MfCFzFObQ&t=1496) timestamp.
 There are tests in [StudentSpec](/src/test/scala/lecture/StudentSpec.scala) that prove that no other state can 
 return the same optimal value as optimal state using bellman's equation.  
 
@@ -38,7 +38,7 @@ Implements bellman's equation to find the quickest path to targets within a grid
 The following shows results of a 11x11 grid with 3 goal targets - ⌂ (circled green). The arrows indicate the optimal direction 
 to take at each grid to reach the nearest target.  
 
-![direction](doc/img/grid_direction_green.png "direction")
+![direction](doc/img/grid_direction.png "direction")
 
 Value function created after 100 value iteration.
  

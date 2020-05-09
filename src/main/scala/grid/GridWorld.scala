@@ -12,7 +12,7 @@ object GridWorld extends App {
    * Default terminals are top left, middle and bottom right.
    */
   val terminals: Seq[(Int, Int)] =
-    Seq((0, 0), ((gridRows - 1) / 2, (gridCols - 1) / 2), (gridRows - 1, gridCols - 1))
+    Seq((0, 0), (gridRows - 1, gridCols - 1))
 
   sealed trait Grid
   object Grid {
