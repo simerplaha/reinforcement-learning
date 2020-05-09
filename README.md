@@ -18,7 +18,7 @@ Bandit from chapter 2. Uses incremental implementation.
 
 Last lever has the highest probability (`0.90`) therefore has more chance of getting pulled.
 
-## Student Markov Chain
+## [Student Markov Chain](/src/main/scala/lecture/Student.scala)
 
 Implements the `Student MDP` from David Silver's lecture 2 at [this (24:56)](https://youtu.be/lfHX2hHRMVQ?list=PLqYmG7hTraZDM-OYHWgPebj2MfCFzFObQ&t=1496) timestamp.
 There are tests in [StudentSpec](/src/test/scala/lecture/StudentSpec.scala) that prove that no other state can 
