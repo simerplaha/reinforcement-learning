@@ -9,7 +9,7 @@ object GridWorld extends App {
   val maxValueIterations = 100
 
   /**
-   * Default terminals are top left, middle and bottom right.
+   * Default terminals are top left and bottom right.
    */
   val terminals: Seq[(Int, Int)] =
     Seq((0, 0), (gridRows - 1, gridCols - 1))
@@ -29,23 +29,19 @@ object GridWorld extends App {
     implicit val doubleOrdering = Ordering.by[Action[Double], Double](_.value)
 
     case class Left[T](value: T) extends Action[T] {
-      def icon: String =
-        "←"
+      def icon: String = "←"
     }
 
     case class Right[T](value: T) extends Action[T] {
-      override def icon: String =
-        "→"
+      override def icon: String = "→"
     }
 
     case class Up[T](value: T) extends Action[T] {
-      override def icon: String =
-        "↑"
+      override def icon: String = "↑"
     }
 
     case class Down[T](value: T) extends Action[T] {
-      override def icon: String =
-        "↓"
+      override def icon: String = "↓"
     }
   }
 
