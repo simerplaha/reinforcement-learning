@@ -22,7 +22,7 @@ Last lever has the highest probability (`0.90`) therefore has more chance of get
 
 Implements the `Student MDP` from David Silver's lecture 2 at [this (24:56)](https://youtu.be/lfHX2hHRMVQ?list=PLqYmG7hTraZDM-OYHWgPebj2MfCFzFObQ&t=1496) timestamp.
 There are tests in [StudentSpec](/src/test/scala/lecture/StudentSpec.scala) that prove that no other state can 
-return the same optimal value as optimal state using bellman's equation.  
+return the same optimal value as optimal state using bellman equation.  
 
 ```console
 Value: -2.25      Sample: List(Class1, Class2, Class3, Pass, Sleep)
@@ -31,9 +31,11 @@ Value: -3.65625   Sample: List(Class1, Class2, Class3, Pub, Class2, Class3, Pass
 Value: -2.21875   Sample: List(Facebook, Facebook, Facebook, Class1, Class2, Class3, Pub, Class2, Sleep)
 ```
 
-## [Grid world](/src/main/scala/grid/GridWorld.scala)
+## Grid World
 
-Implements bellman's equation to find the quickest path to targets within a grid. 
+### [Agent - Dynamic Programming](/src/main/scala/grid/AgentDP.scala)
+
+Implements bellman equation to find the quickest path to targets within a grid. 
 
 The following shows results of a 11x11 grid with 3 goal targets - ⌂ (circled green). The arrows indicate the optimal direction 
 to take at each grid to reach the nearest target.  
