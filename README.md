@@ -45,3 +45,8 @@ to take at each grid to reach the nearest target.
 Value function created after 100 value iteration.
  
 ![values](doc/img/grid_values.png "value function")
+
+## [Perceptron](/src/main/scala/neuron/Perceptron.scala)
+
+A simple example that returns the head/first integer from an input `Array[Int]` by learning from training data set only 
+without explicitly defining the rule to "_return the head integer_".   
