@@ -18,6 +18,11 @@ Bandit from chapter 2. Uses incremental implementation.
 
 Last lever has the highest probability (`0.90`) therefore has more chance of getting pulled.
 
+## [Perceptron](/src/main/scala/neuron/Perceptron.scala)
+
+A simple example that returns the head/first integer from an input `Array[Int]` by learning from training data set only 
+without explicitly defining the rule to "_return the head integer_".   
+
 ## [Student Markov Chain](/src/main/scala/lecture/Student.scala)
 
 Implements the `Student MDP` from David Silver's lecture 2 at [this (24:56)](https://youtu.be/lfHX2hHRMVQ?list=PLqYmG7hTraZDM-OYHWgPebj2MfCFzFObQ&t=1496) timestamp.
@@ -45,8 +50,3 @@ to take at each grid to reach the nearest target.
 Value function created after 100 value iteration.
  
 ![values](doc/img/grid_values.png "value function")
-
-## [Perceptron](/src/main/scala/neuron/Perceptron.scala)
-
-A simple example that returns the head/first integer from an input `Array[Int]` by learning from training data set only 
-without explicitly defining the rule to "_return the head integer_".   

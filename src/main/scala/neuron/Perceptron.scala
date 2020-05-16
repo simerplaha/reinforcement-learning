@@ -100,8 +100,7 @@ object Perceptron {
         println(Matrix(input))
 
         val result = predictValue(input.map(_.toDouble), weights)
-        println(s"Result: $result")
-        println
+        println(s"Result: $result\n")
 
         //assert that the prediction returns the first
         assert(result == input.head, result + " != " + input.head)
