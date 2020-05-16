@@ -5,9 +5,18 @@ Referred material
 - Book by Sutton & Barto - [Reinforcement Learning: An Introduction](http://incompleteideas.net/book/the-book-2nd.html)
 - Lectures by David Silver - [Introduction to reinforcement learning](https://www.youtube.com/playlist?list=PLqYmG7hTraZDM-OYHWgPebj2MfCFzFObQ) 
 
+## [Matrix[T]](/src/main/scala/util/Matrix.scala)
+
+Basic `Matrix[T]` implementation.
+
 ## [Tic-Tac-Toe](/src/main/scala/tictactoe/)
 
-Basic tic-tac-toe game. Uses basic probability matrix for each game state to make decisions. **WIP** - needs better prediction.
+Tic-tac-toe game. Uses basic probability matrix for each game state to make decisions. **TODO** - needs better prediction.
+
+## [Perceptron](/src/main/scala/neuron/Perceptron.scala)
+
+Simple example that returns the head/first integer from an input `Array[Int]` by learning from training dataset only -
+without explicitly defining the rule to "_return the head integer_".   
 
 ## [Multi Arm Bandit](/src/main/scala/bandit/Bandit.scala)
 Bandit from chapter 2. Uses incremental implementation.
@@ -17,11 +26,6 @@ Bandit from chapter 2. Uses incremental implementation.
 ![direction](doc/img/bandit.png "bandit")
 
 Last lever has the highest probability (`0.90`) therefore has more chance of getting pulled.
-
-## [Perceptron](/src/main/scala/neuron/Perceptron.scala)
-
-A simple example that returns the head/first integer from an input `Array[Int]` by learning from training data set only 
-without explicitly defining the rule to "_return the head integer_".   
 
 ## [Student Markov Chain](/src/main/scala/lecture/Student.scala)
 

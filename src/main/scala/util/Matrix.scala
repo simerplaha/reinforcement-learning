@@ -52,12 +52,21 @@ case class Matrix[T: ClassTag](rows: Int,
   def toSeq: Seq[Seq[T]] =
     array.map(_.to(Seq)).to(Seq)
 
+  /**
+   * @return All rows in the [[Matrix]]
+   */
   def rowsArray: Array[Array[T]] =
     array
 
+  /**
+   * @return Iterators for rows
+   */
   def rowsIterator: Iterator[Array[T]] =
     rowsArray.iterator
 
+  /**
+   * @return All colums in the Matrix
+   */
   def columnsArray: Array[Array[T]] =
     (0 until cols).map {
       col =>
@@ -67,21 +76,33 @@ case class Matrix[T: ClassTag](rows: Int,
         }.to(Array)
     }.to(Array)
 
+  /**
+   * @return Column at at index.
+   */
   def column(col: Int): Array[T] =
     (0 until rows).map {
       row =>
         get(row, col)
     }.to(Array)
 
+  /**
+   * @return Row at at index.
+   */
   def row(row: Int): Array[T] =
     array(row)
 
   def columnsIterator() =
     columnsArray.iterator
 
+  /**
+   * @return A new matrix with the updated value.
+   */
   def updateCopy(row: Int, col: Int, value: T): Matrix[T] =
     Matrix(rows, cols, array.updated(row, array(row).updated(col, value)))
 
+  /**
+   * Updates/mutates the value in this matrix.
+   */
   def update(row: Int, col: Int, value: T): Unit =
     array(row)(col) = value
 
@@ -91,6 +112,9 @@ case class Matrix[T: ClassTag](rows: Int,
   def get(row: Int, col: Int): T =
     array(row)(col)
 
+  /**
+   * Applies the input function to the indexes (row, col)
+   */
   def foreachIndex(f: (Int, Int) => Unit): Unit =
     (0 until rows) foreach {
       row =>
@@ -100,6 +124,9 @@ case class Matrix[T: ClassTag](rows: Int,
         }
     }
 
+  /**
+   * Applies the input function to the indexes and the value (row, col, value)
+   */
   def foreachValue(f: (Int, Int, T) => Unit): Unit =
     (0 until rows) foreach {
       row =>
@@ -182,7 +209,7 @@ case class Matrix[T: ClassTag](rows: Int,
     assert(rows == y.rows, s"Cannot perform operation! Matrix x has $rows rows whereas matrix y has ${y.rows} rows. Rows should be same.")
   }
 
-  private def addOrSubtract[B >: T : ClassTag](y: Matrix[B], op: (T, B) => B)(implicit numeric: Numeric[B]): Matrix[B] = {
+  private def addOrSubtract[B >: T : ClassTag](y: Matrix[B], op: (T, B) => B): Matrix[B] = {
     assertAddOrSubtract(y)
 
     val result =
