@@ -35,7 +35,7 @@ object Grid {
   object World {
     def apply(rows: Int, cols: Int, terminals: Seq[(Int, Int)]): World = {
       val matrix =
-        Matrix.create[Grid](rows, cols) {
+        Matrix.fill[Grid](rows, cols) {
           case rowCol =>
             if (terminals.contains(rowCol))
               Grid.Terminal

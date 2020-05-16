@@ -3,47 +3,95 @@ package util
 import scala.reflect.ClassTag
 
 object Matrix {
-  def create[T: ClassTag](rows: Int, cols: Int)(filler: (Int, Int) => T): Matrix[T] =
-    Matrix[T](
-      rows = rows,
-      cols = cols,
-      elems = Array.tabulate(rows, cols)(filler)
+  def apply[T: ClassTag](rows: Array[Array[T]]): Matrix[T] =
+    apply(rows: _*)
+
+  def apply[T: ClassTag](rows: Array[T]*): Matrix[T] =
+    new Matrix[T](
+      rows = rows.length,
+      cols = rows.head.length,
+      array = rows.toArray
     )
 
-  def create[T: ClassTag](rows: Int, cols: Int, default: => T): Matrix[T] =
-    Matrix[T](
+  def fill[T: ClassTag](rows: Int, cols: Int)(filler: (Int, Int) => T): Matrix[T] =
+    new Matrix[T](
       rows = rows,
       cols = cols,
-      elems = Array.fill(rows)(Array.fill(cols)(default))
+      array = Array.tabulate(rows, cols)(filler)
     )
+
+  def fill[T: ClassTag](rows: Int, cols: Int, default: => T): Matrix[T] =
+    new Matrix[T](
+      rows = rows,
+      cols = cols,
+      array = Array.fill(rows)(Array.fill(cols)(default))
+    )
+
+  implicit class VectorImplicits[T](array: Array[T]) {
+    @inline def *[B >: T : ClassTag](b: Array[B])(implicit numeric: Numeric[B]): B = {
+      import numeric._
+      array.zip(b).foldLeft(numeric.zero) {
+        case (sum, (a, b)) =>
+          sum + (a * b)
+      }
+    }
+  }
 }
 
 case class Matrix[T: ClassTag](rows: Int,
                                cols: Int,
-                               private val elems: Array[Array[T]]) {
+                               private val array: Array[Array[T]]) {
+
+  import util.Matrix._
+
+  val shape: String = s"${rows}x$cols"
+
+  def isVector: Boolean =
+    rows == 1 || cols == 1
 
   def toSeq: Seq[Seq[T]] =
-    elems.map(_.to(Seq)).to(Seq)
+    array.map(_.to(Seq)).to(Seq)
+
+  def rowsArray: Array[Array[T]] =
+    array
+
+  def rowsIterator: Iterator[Array[T]] =
+    rowsArray.iterator
+
+  def columnsArray: Array[Array[T]] =
+    (0 until cols).map {
+      col =>
+        (0 until rows).map {
+          row =>
+            get(row, col)
+        }.to(Array)
+    }.to(Array)
+
+  def column(col: Int): Array[T] =
+    (0 until rows).map {
+      row =>
+        get(row, col)
+    }.to(Array)
+
+  def row(row: Int): Array[T] =
+    array(row)
+
+  def columnsIterator() =
+    columnsArray.iterator
 
   def updateCopy(row: Int, col: Int, value: T): Matrix[T] =
-    Matrix(rows, cols, elems.updated(row, elems(row).updated(col, value)))
+    Matrix(rows, cols, array.updated(row, array(row).updated(col, value)))
 
   def update(row: Int, col: Int, value: T): Unit =
-    elems(row)(col) = value
-
-  def row(pos: Int): Seq[T] =
-    elems(pos)
+    array(row)(col) = value
 
   def apply(row: Int, col: Int): T =
     get(row, col)
 
   def get(row: Int, col: Int): T =
-    elems(row)(col)
+    array(row)(col)
 
-  def map[B: ClassTag](f: Seq[T] => B): Seq[B] =
-    elems.map(array => f(array))
-
-  def foreach(f: (Int, Int) => Unit): Unit =
+  def foreachIndex(f: (Int, Int) => Unit): Unit =
     (0 until rows) foreach {
       row =>
         (0 until cols) foreach {
@@ -61,7 +109,7 @@ case class Matrix[T: ClassTag](rows: Int,
         }
     }
 
-  def foldLeft[B](initial: B)(f: (B, (Int, Int, T)) => B): B = {
+  def foldLeftIndexValue[B](initial: B)(f: (B, (Int, Int, T)) => B): B = {
     var value = initial
     foreachValue {
       case (row, col, move) =>
@@ -69,6 +117,97 @@ case class Matrix[T: ClassTag](rows: Int,
     }
     value
   }
+
+  private def assertMultiplication(y: Matrix[_]): Unit =
+    assert(cols == y.rows, s"Cannot multiple - Matrix x has $cols columns whereas matrix y has ${y.rows} rows. Columns of X != Rows of Y")
+
+  def transpose: Matrix[T] =
+    Matrix(columnsArray)
+
+  private def vectorProduct[B >: T : ClassTag](y: Matrix[B])(implicit numeric: Numeric[B]): Matrix[B] = {
+    import numeric._
+
+    val result =
+      array.zip(y.array).map {
+        case (left, right) =>
+          left.zip(right).map {
+            case (left, right) =>
+              left * right
+          }
+      }
+
+    Matrix(result)
+  }
+
+  def *[B >: T : ClassTag](y: Matrix[B])(implicit numeric: Numeric[B]): Matrix[B] =
+    if (this.isVector && y.isVector && rows == y.rows && cols == y.cols) {
+      vectorProduct(y)
+    } else {
+      assertMultiplication(y)
+
+      val result =
+        array.map {
+          row =>
+            y.columnsArray map {
+              yColumn =>
+                row * yColumn
+            }
+        }
+
+      Matrix(result)
+    }
+
+  def *[B >: T : ClassTag](scalar: B)(implicit numeric: Numeric[B]): Matrix[B] = {
+    import numeric._
+    val result =
+      array map {
+        array =>
+          array map {
+            element =>
+              scalar * element
+          }
+      }
+
+    Matrix(result)
+  }
+
+  def +[B >: T : ClassTag](y: Matrix[B])(implicit numeric: Numeric[B]): Matrix[B] =
+    addOrSubtract[B](y, (left, right) => numeric.plus(left, right))
+
+  def -[B >: T : ClassTag](y: Matrix[B])(implicit numeric: Numeric[B]): Matrix[B] =
+    addOrSubtract[B](y, (left, right) => numeric.minus(left, right))
+
+  private def assertAddOrSubtract(y: Matrix[_]): Unit = {
+    assert(cols == y.cols, s"Cannot perform operation! Matrix x has $cols columns whereas matrix y has ${y.cols} cols. Columns should be same.")
+    assert(rows == y.rows, s"Cannot perform operation! Matrix x has $rows rows whereas matrix y has ${y.rows} rows. Rows should be same.")
+  }
+
+  private def addOrSubtract[B >: T : ClassTag](y: Matrix[B], op: (T, B) => B)(implicit numeric: Numeric[B]): Matrix[B] = {
+    assertAddOrSubtract(y)
+
+    val result =
+      array.zip(y.array) map {
+        case (left, right) =>
+          left.zip(right) map {
+            case (left, right) =>
+              op(left, right)
+          }
+      }
+
+    Matrix(result)
+  }
+
+  private def mapArray[B: ClassTag](f: T => B): Array[Array[B]] =
+    array map {
+      array =>
+        array map {
+          element =>
+            f(element)
+        }
+    }
+
+  def map[B: ClassTag](f: T => B): Matrix[B] =
+    Matrix(mapArray(f))
 
   def exists(f: T => Boolean): Boolean = {
     var row = 0
@@ -87,6 +226,29 @@ case class Matrix[T: ClassTag](rows: Int,
     false
   }
 
+  def iterator: Iterator[T] =
+    new Iterator[T] {
+      var row = 0
+      var col = 0
+
+      private def prepareForNextRead() =
+        if (col == cols - 1) {
+          row += 1
+          col = 0
+        } else {
+          col += 1
+        }
+
+      override def hasNext: Boolean =
+        row < rows && col < cols
+
+      override def next(): T = {
+        val item = get(row, col)
+        prepareForNextRead()
+        item
+      }
+    }
+
   override def toString(): String =
     toStringCustom((_, _, value) => value.toString)
 
@@ -98,7 +260,7 @@ case class Matrix[T: ClassTag](rows: Int,
    */
   def toStringCustom(toString: (Int, Int, T) => String): String = {
     val maxLength =
-      this.foldLeft(0) {
+      this.foldLeftIndexValue(0) {
         case (size, (row, col, value)) =>
           size max toString(row, col, value).length
       }

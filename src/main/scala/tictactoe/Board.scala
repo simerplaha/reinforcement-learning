@@ -16,7 +16,7 @@ sealed trait Board {
   def isActive: Boolean = !isOver
 
   def prettyString: String =
-    matrix.foldLeft("| ") {
+    matrix.foldLeftIndexValue("| ") {
       case (string, (row, col, move)) =>
         string + move.getOrElse("-") + " | " + {
           if (col == 2 && row < 2)
@@ -32,7 +32,7 @@ object Board {
   val MAX_BOARD_INDEX = 2
 
   def create(): Board.Active =
-    Active(Matrix.create(3, 3, None))
+    Active(Matrix.fill(3, 3, None))
 
   def place(row: Int, col: Int, move: Move, board: Board.Active): Board = {
     val updatedMoves = board.matrix.updateCopy(row, col, Some(move))
@@ -93,7 +93,7 @@ object Board {
       if (colIndex > MAX_BOARD_INDEX) {
         None
       } else {
-        val col = board.matrix.map(_ (colIndex))
+        val col = board.matrix.rowsArray.map(_ (colIndex))
         val head: Option[Move] = col.head
         if (head.isDefined && col.forall(_ == head))
           head

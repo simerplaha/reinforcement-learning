@@ -23,7 +23,7 @@ object AgentDP {
     }
 
   def exploreLookAhead(agent: ActionValues)(implicit world: World): Unit =
-    agent.values.foreach {
+    agent.values.foreachIndex {
       case (row, col) =>
         lookAheadMutateActionValue(row, col, agent)
     }
@@ -36,7 +36,7 @@ object AgentDP {
     }
 
   def directionsMatrix(agent: ActionValues)(implicit world: World): Matrix[Option[Action[Double]]] =
-    Matrix.create[Option[Action[Double]]](agent.values.rows, agent.values.cols) {
+    Matrix.fill[Option[Action[Double]]](agent.values.rows, agent.values.cols) {
       case (row, col) =>
         world.matrix.get(row, col) match {
           case Grid.Terminal =>
@@ -56,7 +56,7 @@ object AgentDP {
         terminals = Seq((0, 0), (10, 10))
       )
 
-    val agent = ActionValues(Matrix.create[Double](world.rows, world.cols, 0.0))
+    val agent = ActionValues(Matrix.fill[Double](world.rows, world.cols, 0.0))
 
     explore(
       agent = agent,
