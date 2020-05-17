@@ -3,7 +3,10 @@ package lecture
 import java.util.Random
 
 /**
- * See tests [[StudentClassSpec]]
+ * This class basically builds the model described in David Silver's lecture
+ * https://www.youtube.com/watch?v=lfHX2hHRMVQ&feature=youtu.be&list=PLqYmG7hTraZDM-OYHWgPebj2MfCFzFObQ&t=1496
+ *
+ * See tests [[StudentClassSpec]] to see how this model is used.
  */
 sealed trait State {
   def reward: Int
@@ -111,6 +114,8 @@ object State {
 }
 
 object Agent {
+  //given a sample this computes the total value/returns a value that indicates
+  //how good is this sample.
   def calculateValue(sample: Iterable[State], discountFactor: Option[Double]): Double =
     sample.zipWithIndex.foldLeft(0.0) {
       case (totalReward, (state, position)) =>

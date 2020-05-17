@@ -10,7 +10,7 @@ import scala.util.Random
  */
 object Perceptron {
 
-  //4x3 matrix
+  //Training inputs
   val trainingInputs: Matrix[Double] =
     Matrix(
       Array(0, 0, 1),
@@ -19,7 +19,7 @@ object Perceptron {
       Array(0, 1, 1)
     )
 
-  //4x1 matrix
+  //Expected output from the above training inputs.
   val trainingOutputs: Matrix[Double] =
     Vector(
       0,

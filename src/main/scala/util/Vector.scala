@@ -9,6 +9,10 @@ object Vector {
     Matrix(rowItems.to(Array).map(item => Array(item)))
 
   //creates a vector with one column.
+  def fill[T: ClassTag](size: Int, default: => T): Matrix[T] =
+    Matrix.fill(size, 1, default)
+
+  //creates a vector with one column.
   def col[T: ClassTag](rowItems: T*): Matrix[T] =
     Vector(rowItems: _*)
 

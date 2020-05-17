@@ -38,6 +38,7 @@ object Matrix {
   }
 }
 
+
 case class Matrix[T: ClassTag](rows: Int,
                                cols: Int,
                                private val array: Array[Array[T]]) {
@@ -148,6 +149,7 @@ case class Matrix[T: ClassTag](rows: Int,
   private def assertMultiplication(y: Matrix[_]): Unit =
     assert(cols == y.rows, s"Cannot multiple - Matrix x has $cols columns whereas matrix y has ${y.rows} rows. Columns of X != Rows of Y")
 
+  //inverts the matrix.
   def transpose: Matrix[T] =
     Matrix(columnsArray)
 
@@ -168,6 +170,7 @@ case class Matrix[T: ClassTag](rows: Int,
 
   def *[B >: T : ClassTag](y: Matrix[B])(implicit numeric: Numeric[B]): Matrix[B] =
     if (this.isVector && y.isVector && rows == y.rows && cols == y.cols) {
+      //special treatment for vectors.
       vectorProduct(y)
     } else {
       assertMultiplication(y)
@@ -284,6 +287,8 @@ case class Matrix[T: ClassTag](rows: Int,
 
   /**
    * Given the row, col and the value returns a custom String to insert in the matrix.
+   *
+   * Pretty print for this matrix.
    */
   def toStringCustom(toString: (Int, Int, T) => String): String = {
     val maxLength =
