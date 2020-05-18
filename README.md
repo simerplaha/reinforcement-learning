@@ -42,7 +42,7 @@ Value: -2.21875   Sample: List(Facebook, Facebook, Facebook, Class1, Class2, Cla
 
 ## Grid World
 
-### [Agent - Dynamic Programming](/src/main/scala/grid/AgentDP.scala)
+### [Agent - Dynamic Programming](/src/main/scala/grid/AgentDynamicProgramming.scala)
 
 Implements bellman equation to find the quickest path to targets within a grid. 
 
@@ -54,3 +54,18 @@ to take at each grid to reach the nearest target.
 Value function created after 100 value iteration.
  
 ![values](doc/img/grid_values.png "value function")
+
+### [Agent - Monte Carlo](/src/main/scala/grid/AgentMonteCarlo.scala)
+
+Monte Carlo Agents do not have any knowledge of the environment. The Agent knows the 
+Action it can perform and has to learn by executing random Actions on the Environment 
+with the goal to find an optimal Policy, Action and State.
+
+The following image shows the beginning (1st iteration) where the Agent 
+randomly walks the Grid starting from top-left to reach the green circled gird marked ⌂.
+
+![direction](doc/img/monte_carlo_1.png "direction")
+
+After 1000 iterations the Agent finds a better policy. 
+ 
+![values](doc/img/monte_carlo_2.png "value function")
